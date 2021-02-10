@@ -1,18 +1,47 @@
-import { Button } from "@material-ui/core";
-import React from "react";
+import { Button, Input } from "@material-ui/core";
+import React, { useState } from "react";
 import "./Login.css";
 import { auth, provider } from "../../config";
+import { useStateValue } from "../../StateProvider";
+import { actionTypes } from "../../reducer";
+
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [{}, dispatch] = useStateValue();
+
   const signIn = () => {
     auth
-      .signInWithRedirect(provider)
-      .then((result) => console.log(result))
+      .signInWithEmailAndPassword(email, password)
+      .then((result) => {
+        console.log(result);
+        dispatch({
+          type: actionTypes.SET_USER,
+          user: result.user,
+        });
+      })
       .catch((error) => alert(error.message));
   };
   return (
     <div className="login">
       <div className="login__container">
-        <Button onClick={signIn}>Sign In</Button>
+        <form className="app__signup">
+          <Input
+            placeholder="email"
+            fullWidth={true}
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            placeholder="password"
+            fullWidth={true}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button onClick={signIn}>Sign In</Button>
+        </form>
       </div>
     </div>
   );
