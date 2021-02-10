@@ -5,7 +5,7 @@ import { auth, provider } from "../../config";
 function Login() {
   const signIn = () => {
     auth
-      .signInWithPopup(provider)
+      .signInWithRedirect(provider)
       .then((result) => console.log(result))
       .catch((error) => alert(error.message));
   };
