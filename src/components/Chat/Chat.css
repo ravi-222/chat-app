@@ -54,7 +54,7 @@
   background-repeat: repeat;
   background-position: center;
   padding: 30px;
-  overflow: scroll;
+  overflow: auto;
 }
 .chat__footer {
   display: flex;
@@ -72,6 +72,9 @@
   border-radius: 30px;
   padding: 10px;
   border: none;
+}
+.chat__footer > form > input:focus {
+  outline: none;
 }
 .chat__footer > form > button {
   display: none;

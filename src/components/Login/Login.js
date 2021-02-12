@@ -1,7 +1,7 @@
 import { Button, Input } from "@material-ui/core";
 import React, { useState } from "react";
 import "./Login.css";
-import { auth, provider } from "../../config";
+import { auth } from "../../config";
 import { useStateValue } from "../../StateProvider";
 import { actionTypes } from "../../reducer";
 
@@ -14,7 +14,6 @@ function Login() {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        console.log(result);
         dispatch({
           type: actionTypes.SET_USER,
           user: result.user,

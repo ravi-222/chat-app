@@ -7,7 +7,7 @@ import {
   MoreVert,
   SearchOutlined,
 } from "@material-ui/icons";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import "./Chat.css";
 import db from "../../config";
@@ -20,7 +20,7 @@ function Chat() {
   const [roomName, setRoomName] = useState("");
   const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
-
+  const dummy = useRef();
   useEffect(() => {
     if (roomId) {
       db.collection("rooms")
@@ -42,10 +42,11 @@ function Chat() {
     e.preventDefault();
     db.collection("rooms").doc(roomId).collection("messages").add({
       message: input,
-      name: user.displayName,
+      name: user.email,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setInput("");
+    dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -77,7 +78,7 @@ function Chat() {
         {messages.map((message) => (
           <p
             className={`chat__message ${
-              message.name === user.displayName && "chat__reciever"
+              message.name === user.email && "chat__reciever"
             }`}
           >
             <span className="chat__name">{message.name}</span>
@@ -87,6 +88,7 @@ function Chat() {
             </span>
           </p>
         ))}
+        <div ref={dummy}></div>
       </div>
       <div className="chat__footer">
         <InsertEmoticon />

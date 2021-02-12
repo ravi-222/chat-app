@@ -1,6 +1,6 @@
 import { Avatar, IconButton } from "@material-ui/core";
 import { Chat, DonutLarge, MoreVert, SearchOutlined } from "@material-ui/icons";
-import SidebarChat from "../SidebarChat/SidebarChat";
+import SidebarChat from "./SidebarChat/SidebarChat";
 
 import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
