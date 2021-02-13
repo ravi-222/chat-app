@@ -14,7 +14,11 @@
   margin-bottom: 8px;
 }
 .sidebarChat__info {
+  max-width: 350px;
   margin-left: 15px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 a {

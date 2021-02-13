@@ -28,12 +28,17 @@
   border-radius: 10px;
   width: fit-content;
   margin-bottom: 30px;
+  max-width: 450px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 .chat__reciever {
   margin-left: auto;
   background-color: #dcf8c6;
 }
 .chat__timestamp {
+  padding-top: 10px;
   margin-left: 10px;
   font-size: xx-small;
 }
@@ -53,7 +58,7 @@
   background-image: url("https://images-ext-1.discordapp.net/external/DijgH1oGkpKRGW_soO3IQtj0wewJ6RbVjhEWZQlW3oU/https/user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png?width=361&height=662");
   background-repeat: repeat;
   background-position: center;
-  padding: 30px;
+  padding: 30px 20px 0px 20px;
   overflow: auto;
 }
 .chat__footer {

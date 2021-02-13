@@ -10,7 +10,7 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import "./Chat.css";
-import db from "../../config";
+import db, { storage } from "../../config";
 import { useStateValue } from "../../StateProvider";
 import firebase from "firebase";
 
@@ -20,7 +20,13 @@ function Chat() {
   const [roomName, setRoomName] = useState("");
   const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
+  const [file, setFile] = useState("");
   const dummy = useRef();
+  const inputReference = useRef();
+  useEffect(() => {
+    dummy.current.scrollIntoView();
+  }, [messages]);
+
   useEffect(() => {
     if (roomId) {
       db.collection("rooms")
@@ -40,38 +46,51 @@ function Chat() {
 
   const sendMessage = (e) => {
     e.preventDefault();
-    db.collection("rooms").doc(roomId).collection("messages").add({
-      message: input,
-      name: user.email,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    if (file) {
+      const uploadTask = storage.ref(`files/${file.name}`).put(file);
+      uploadTask.on(
+        "state_changed",
+        () => {},
+        (error) => {
+          console.log(error);
+          alert(error.message);
+        },
+        () => {
+          storage
+            .ref("files")
+            .child(file.name)
+            .getDownloadURL()
+            .then((url) => {
+              db.collection("rooms").doc(roomId).collection("messages").add({
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                file: url,
+                message: input,
+                name: user.email,
+              });
+            });
+        }
+      );
+    } else {
+      db.collection("rooms").doc(roomId).collection("messages").add({
+        message: input,
+        name: user.email,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+    setFile({});
     setInput("");
-    dummy.current.scrollIntoView({ behavior: "smooth" });
   };
+  const onFileInput = (e) => {
+    console.log(e.target.files[0]);
+    setFile(e.target.files[0]);
+  };
+  const onFileUpload = () => inputReference.current.click();
 
   return (
     <div className="chat">
       <div className="chat__header">
-        <Avatar src="https://avatars.dicebear.com/api/human/3.svg" />
         <div className="chat__headerInfo">
           <h3>{roomName}</h3>
-          <p>
-            Last seen at...
-            {new Date(
-              messages[messages.length - 1]?.timestamp?.toDate()
-            ).toUTCString()}
-          </p>
-        </div>
-        <div className="chat__headerRight">
-          <IconButton>
-            <SearchOutlined />
-          </IconButton>
-          <IconButton>
-            <AttachFile />
-          </IconButton>
-          <IconButton>
-            <MoreVert />
-          </IconButton>
         </div>
       </div>
       <div className="chat__body">
@@ -82,13 +101,19 @@ function Chat() {
             }`}
           >
             <span className="chat__name">{message.name}</span>
+            {message.file && (
+              <video width="320" height="240" controls>
+                <source src={message.file} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
             {message.message}
-            <span className="chat__timestamp">
+            <div className="chat__timestamp">
               {new Date(message.timestamp?.toDate()).toUTCString()}
-            </span>
+            </div>
           </p>
         ))}
-        <div ref={dummy}></div>
+        <span ref={dummy}></span>
       </div>
       <div className="chat__footer">
         <InsertEmoticon />
@@ -103,7 +128,14 @@ function Chat() {
             Send Message
           </button>
         </form>
-        <Mic />
+        <input type="file" ref={inputReference} onChange={onFileInput} hidden />
+
+        <IconButton onClick={onFileUpload}>
+          <AttachFile />
+        </IconButton>
+        <IconButton>
+          <Mic />
+        </IconButton>
       </div>
     </div>
   );
