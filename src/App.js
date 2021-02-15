@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import "./App.css";
-import Sidebar from "./components/Sidebar/Sidebar";
-import Chat from "./components/Chat/Chat";
+import Sidebar from "./containers/Sidebar/Sidebar";
+import ChatRoom from "./containers/ChatRoom/ChatRoom";
 import { Route, Router, Switch } from "react-router-dom";
-import Login from "./components/Login/Login";
+import Login from "./containers/Login/Login";
 import { useStateValue } from "./StateProvider";
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -14,7 +14,7 @@ function App() {
       ) : (
         <div className="app__body">
           <Sidebar />
-          <Route path="/rooms/:roomId" component={Chat} />
+          <Route path="/rooms/:roomId" component={ChatRoom} />
         </div>
       )}
     </div>

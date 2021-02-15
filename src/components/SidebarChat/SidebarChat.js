@@ -1,7 +1,7 @@
 import { Avatar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import "./SidebarChat.css";
-import db from "../../../config";
+import db from "../../config";
 import { Link } from "react-router-dom";
 
 function SidebarChat({ id, name, addNewChat }) {
