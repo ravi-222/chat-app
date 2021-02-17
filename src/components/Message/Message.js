@@ -4,12 +4,12 @@ import React from "react";
 import Attachment from "../attachment/Attachment";
 import "./Message.css";
 
-const Message = ({ message, type, email }) => {
+const Message = ({ message, type, name }) => {
   return (
     <div className="chat__message">
       <p
         className={`chat__message__content ${
-          message.name === email && "chat__sender"
+          message.name === name && "chat__sender"
         }`}
       >
         <span className="message__name">{message.name}</span>
@@ -21,9 +21,18 @@ const Message = ({ message, type, email }) => {
           {new Date(message.timestamp?.toDate()).toUTCString()}
         </div>
       </p>
-      {/*  <IconButton disableRipple={true} size="small">
-        <Reply fontSize="small" />
-      </IconButton> */}
+      <div className="message__side">
+        <img
+          className="message__avatar"
+          src={
+            message.photoUrl ||
+            "https://api.adorable.io/avatars/23/abott@adorable.png"
+          }
+        />
+        <IconButton disableRipple={true} size="small">
+          <Reply fontSize="small" />
+        </IconButton>
+      </div>
     </div>
   );
 };

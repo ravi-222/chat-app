@@ -1,7 +1,7 @@
 import { Button, Input } from "@material-ui/core";
 import React, { useState } from "react";
 import "./Login.css";
-import { auth } from "../../config";
+import { auth, provider } from "../../config";
 import { useStateValue } from "../../StateProvider";
 import { actionTypes } from "../../reducer";
 
@@ -11,6 +11,19 @@ function Login() {
   const [{}, dispatch] = useStateValue();
 
   const signIn = () => {
+    // const provider = new firebase.auth.GoogleAuthProvider();
+    auth
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log(result.user);
+        dispatch({
+          type: actionTypes.SET_USER,
+          user: result.user,
+        });
+      })
+      .catch((error) => alert(error.message));
+  };
+  /* const signIn = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
@@ -20,12 +33,12 @@ function Login() {
         });
       })
       .catch((error) => alert(error.message));
-  };
+  }; */
   return (
     <div className="login">
       <div className="login__container">
         <form className="app__signup">
-          <Input
+          {/* <Input
             placeholder="email"
             fullWidth={true}
             type="text"
@@ -38,7 +51,7 @@ function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          />
+           />*/}
           <Button onClick={signIn}>Sign In</Button>
         </form>
       </div>

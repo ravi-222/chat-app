@@ -22,7 +22,7 @@ function ChatRoom() {
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
   const [fileType, setFileType] = useState();
-  const [messages, setMessages] = de([]);
+  const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
   const [data, setData] = useState();
   const [url, setUrl] = useState();
@@ -53,7 +53,7 @@ function ChatRoom() {
       const uploadTask = storage.ref(`files/${dataName}`).put(data);
       uploadTask.on(
         "state_changed",
-        (snapshot) => {},
+        () => {},
         (error) => {
           console.log(error);
           alert(error.message);
@@ -68,8 +68,9 @@ function ChatRoom() {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 file: url,
                 message: input,
-                name: user.email,
+                name: user.displayName,
                 type: fileType,
+                photoUrl: user.photoURL,
               });
               setData();
               setInput("");
@@ -82,9 +83,10 @@ function ChatRoom() {
     } else {
       db.collection("rooms").doc(roomId).collection("messages").add({
         message: input,
-        name: user.email,
+        name: user.displayName,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         type: 0,
+        photoUrl: user.photoURL,
       });
     }
     setData();
@@ -126,7 +128,7 @@ function ChatRoom() {
           <h3>{roomName}</h3>
         </div>
       </div>
-      <Chat messages={messages} email={user.email} />
+      <Chat messages={messages} name={user.displayName} />
 
       {url && (
         <div className="chat__file__preview">

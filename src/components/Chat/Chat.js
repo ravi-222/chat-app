@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import "./Chat.css";
 import Message from "../Message/Message";
 
-function Chat({ messages, email }) {
+function Chat({ messages, name }) {
   const dummy = useRef();
 
   useEffect(() => {
@@ -12,7 +12,7 @@ function Chat({ messages, email }) {
   return (
     <div className="chat__body">
       {messages.map((message) => (
-        <Message message={message} type={message.type} email={email} />
+        <Message message={message} type={message.type} name={name} />
       ))}
       <span ref={dummy}></span>
     </div>
