@@ -1,4 +1,7 @@
 .chat__message {
+  display: flex;
+}
+.chat__message__content {
   position: relative;
   font-size: 16px;
   padding: 10px;
@@ -12,21 +15,25 @@
   hyphens: auto;
   max-width: 345;
 }
-.chat__reciever {
+.chat__sender {
   margin-left: auto;
-  background-color: #dcf8c6;
-}
-.message__header {
-  display: flex;
-  justify-content: space-between;
+  color: #ffffff;
+  background-color: pink;
 }
 .message__timestamp {
   padding-top: 10px;
   margin-left: 10px;
   font-size: xx-small;
+  color: #271616;
 }
 
-.message__media {
-  height: 0;
-  padding-top: 56.25%;
+.message__name {
+  position: absolute;
+  color: #000;
+  top: -15px;
+  font-weight: 800;
+  font-size: x-small;
+}
+.message__text {
+  width: 100%;
 }

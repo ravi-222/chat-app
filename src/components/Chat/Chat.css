@@ -1,15 +1,8 @@
 .chat__body {
   flex: 1;
-  background-image: url("https://images-ext-1.discordapp.net/external/DijgH1oGkpKRGW_soO3IQtj0wewJ6RbVjhEWZQlW3oU/https/user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png?width=361&height=662");
+
   background-repeat: repeat;
   background-position: center;
   padding: 30px 20px 0px 20px;
   overflow: auto;
-}
-
-.chat__name {
-  position: absolute;
-  top: -15px;
-  font-weight: 800;
-  font-size: xx-small;
 }

@@ -55,3 +55,8 @@
   padding: 10px;
   color: gray;
 }
+
+.chat__file__preview {
+  display: flex;
+  margin: auto;
+}

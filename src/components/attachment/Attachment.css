@@ -1,0 +1,17 @@
+.message__image {
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px;
+  padding: 5px;
+  width: 400px;
+}
+
+.message__image:hover {
+  box-shadow: 0 0 2px 1px pink;
+}
+
+video {
+  outline: none;
+}
+audio {
+  outline: none;
+}
