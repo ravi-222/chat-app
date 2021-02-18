@@ -13,7 +13,7 @@
   padding: 10px;
   background-color: #ffffff;
   border-radius: 25px;
-  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
@@ -22,6 +22,8 @@
 .message__content__sender {
   color: #ffffff;
   background-color: orchid;
+  border-radius: 25px;
+  border-bottom-right-radius: 5px;
 }
 
 .message__content__name {

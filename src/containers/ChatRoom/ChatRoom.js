@@ -26,9 +26,16 @@ function ChatRoom() {
   const [{ user }, dispatch] = useStateValue();
   const [data, setData] = useState();
   const [url, setUrl] = useState();
-
+  const [typing, setTyping] = useState([]);
   const inputReference = useRef();
 
+  useEffect(() => {
+    db.collection("rooms")
+      .doc(roomId)
+      .onSnapshot((snapshot) => {
+        setTyping(snapshot.data().typing);
+      });
+  }, [input]);
   useEffect(() => {
     if (roomId) {
       db.collection("rooms")
@@ -89,6 +96,11 @@ function ChatRoom() {
         photoUrl: user.photoURL,
       });
     }
+    db.collection("rooms")
+      .doc(roomId)
+      .update({
+        typing: firebase.firestore.FieldValue.arrayRemove(user.displayName),
+      });
     setData();
     setInput("");
     setFileType();
@@ -115,10 +127,19 @@ function ChatRoom() {
     }
   };
   const inputHandleChange = (e) => {
+    let name = `${user.displayName}, `;
     if (e.target.value != "") {
-      db.collection("rooms").doc(roomId).set({ typing: user.displayName });
+      db.collection("rooms")
+        .doc(roomId)
+        .update({
+          typing: firebase.firestore.FieldValue.arrayUnion(name),
+        });
     } else {
-      console.log("not typing...");
+      db.collection("rooms")
+        .doc(roomId)
+        .update({
+          typing: firebase.firestore.FieldValue.arrayRemove(name),
+        });
     }
     setInput(e.target.value);
   };
@@ -132,7 +153,7 @@ function ChatRoom() {
     <div className="chat">
       <div className="chat__header">
         <h2>{roomName}</h2>
-        <p>typing</p>
+        {typing.length == 0 ? null : <p>{[...typing]}is typing.</p>}
       </div>
       <Chat messages={messages} name={user.displayName} />
       {url && (
