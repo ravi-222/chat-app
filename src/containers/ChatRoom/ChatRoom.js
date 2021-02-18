@@ -114,7 +114,14 @@ function ChatRoom() {
       inputReference.current.value = "";
     }
   };
-
+  const inputHandleChange = (e) => {
+    if (e.target.value != "") {
+      db.collection("rooms").doc(roomId).set({ typing: user.displayName });
+    } else {
+      console.log("not typing...");
+    }
+    setInput(e.target.value);
+  };
   const removeAttachment = () => {
     setUrl();
     setData();
@@ -153,7 +160,7 @@ function ChatRoom() {
         <form>
           <input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={inputHandleChange}
             placeholder="Type a message"
             type="text"
           />
