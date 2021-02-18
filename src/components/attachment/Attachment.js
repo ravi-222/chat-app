@@ -1,5 +1,4 @@
 import React from "react";
-import "./Attachment.css";
 
 function Attachment({ type, file }) {
   let attachedFile;
@@ -7,7 +6,7 @@ function Attachment({ type, file }) {
     case 1:
       attachedFile = (
         <a target="_blank" href={file}>
-          <img className="message__image" src={file} alt="Chat immage" />
+          <img src={file} alt="Chat immage" />
         </a>
       );
 

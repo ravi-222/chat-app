@@ -8,7 +8,7 @@ import {
   MoreVert,
   Send,
 } from "@material-ui/icons";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useParams } from "react-router-dom";
 import "./ChatRoom.css";
 import db, { storage } from "../../config";
@@ -124,18 +124,18 @@ function ChatRoom() {
   return (
     <div className="chat">
       <div className="chat__header">
-        <div className="chat__headerInfo">
-          <h3>{roomName}</h3>
-        </div>
+        <h2>{roomName}</h2>
+        <p>typing</p>
       </div>
       <Chat messages={messages} name={user.displayName} />
-
       {url && (
-        <div className="chat__file__preview">
+        <div className="chat__file">
           <IconButton onClick={removeAttachment}>
             <Cancel />
           </IconButton>
-          <Attachment type={fileType} file={url} />
+          <div className="chat__file__preview">
+            <Attachment type={fileType} file={url} />
+          </div>
         </div>
       )}
       <div className="chat__footer">

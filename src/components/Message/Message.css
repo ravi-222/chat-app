@@ -1,45 +1,67 @@
-.chat__message {
+.message {
   display: flex;
+  align-items: center;
+  padding: 1rem;
 }
-.chat__message__content {
+.message__sender {
+  flex-direction: row-reverse;
+}
+
+.message__content {
   position: relative;
   font-size: 16px;
   padding: 10px;
   background-color: #ffffff;
-  border-radius: 10px;
-  width: fit-content;
-  margin-bottom: 30px;
-  max-width: 450px;
+  border-radius: 25px;
+  border-bottom-right-radius: 5px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
-  max-width: 345;
+  max-width: 30em;
 }
-.chat__sender {
-  margin-left: auto;
+.message__content__sender {
   color: #ffffff;
-  background-color: pink;
-}
-.message__timestamp {
-  padding-top: 10px;
-  margin-left: 10px;
-  font-size: xx-small;
-  color: #271616;
+  background-color: orchid;
 }
 
-.message__name {
+.message__content__name {
   position: absolute;
   color: #000;
   top: -15px;
   font-weight: 800;
   font-size: x-small;
 }
-.message__text {
-  width: 100%;
+
+.message__content__file > a > img {
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 20px;
+  padding: 5px;
+  width: 29rem;
 }
-img {
-  width: 40px;
-  height: 40px;
+.message__content__file > a > img:hover {
+  box-shadow: 0 0 2px 1px pink;
+}
+
+.message__content__file > a > video {
+  outline: none;
+}
+.message__content__file > a > audio {
+  outline: none;
+}
+
+.message__content__timestamp {
+  padding-top: 10px;
+  margin-left: 10px;
+  font-size: xx-small;
+  color: #271616;
+}
+
+.message__avatar > img {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   margin: 2px 5px;
+}
+.message__button {
+  padding: 1em;
 }
