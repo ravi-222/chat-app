@@ -10,6 +10,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [{}, dispatch] = useStateValue();
 
+  //this is for the popup google account signup
   const signIn = () => {
     // const provider = new firebase.auth.GoogleAuthProvider();
     auth
@@ -23,6 +24,8 @@ function Login() {
       })
       .catch((error) => alert(error.message));
   };
+
+  //this is for the manual email password sign in
   /* const signIn = () => {
     auth
       .signInWithEmailAndPassword(email, password)

@@ -4,7 +4,10 @@ import React from "react";
 import Attachment from "../attachment/Attachment";
 import "./Message.css";
 
-const Message = ({ message, type, name }) => {
+const Message = ({ message, type, name, refMethod }) => {
+  const refMessageSetter = () => {
+    refMethod(message);
+  };
   return (
     <div className={`message ${message.name === name && "message__sender"} `}>
       <div className={`message__avatar`}>
@@ -20,6 +23,7 @@ const Message = ({ message, type, name }) => {
           message.name === name && "message__content__sender"
         }`}
       >
+        {message.reference_msg && <span>{message.reference_msg.message}</span>}
         <span className="message__content__name">{message.name}</span>
         <div className="message__content__file">
           {message.file && <Attachment type={type} file={message.file} />}
@@ -30,7 +34,7 @@ const Message = ({ message, type, name }) => {
         </div>
       </div>
       <div className={`message__button`}>
-        <IconButton size="small">
+        <IconButton size="small" onClick={refMessageSetter}>
           <Reply fontSize="small" />
         </IconButton>
       </div>

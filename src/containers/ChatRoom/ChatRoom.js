@@ -27,8 +27,10 @@ function ChatRoom() {
   const [data, setData] = useState();
   const [url, setUrl] = useState();
   const [typing, setTyping] = useState([]);
+  const [refMessage, setRefmessage] = useState(null);
   const inputReference = useRef();
 
+  //useEffect for fetching the typing status
   useEffect(() => {
     db.collection("rooms")
       .doc(roomId)
@@ -36,6 +38,8 @@ function ChatRoom() {
         setTyping(snapshot.data().typing);
       });
   }, [input]);
+
+  //useEffect for fetching all the messages
   useEffect(() => {
     if (roomId) {
       db.collection("rooms")
@@ -53,8 +57,21 @@ function ChatRoom() {
     }
   }, [roomId]);
 
+  //for sending the message to firebase
   const sendMessage = async (e) => {
+    //this name if for the typing status
     e.preventDefault();
+    let name = `${user.displayName}, `;
+    let message = {
+      message: input,
+      name: user.displayName,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      type: fileType,
+      photoUrl: user.photoURL,
+    };
+    if (data) {
+      message = {};
+    }
     if (data) {
       let dataName = `${Math.floor(Math.random() * 5000)}__${data.name}`;
       const uploadTask = storage.ref(`files/${dataName}`).put(data);
@@ -72,18 +89,14 @@ function ChatRoom() {
             .getDownloadURL()
             .then((url) => {
               db.collection("rooms").doc(roomId).collection("messages").add({
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                file: url,
                 message: input,
                 name: user.displayName,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 type: fileType,
                 photoUrl: user.photoURL,
+                file: url,
+                reference_msg: refMessage,
               });
-              setData();
-              setInput("");
-              setFileType();
-              setUrl();
-              inputReference.current.value = "";
             });
         }
       );
@@ -94,19 +107,24 @@ function ChatRoom() {
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         type: 0,
         photoUrl: user.photoURL,
+        reference_msg: refMessage,
       });
     }
     db.collection("rooms")
       .doc(roomId)
       .update({
-        typing: firebase.firestore.FieldValue.arrayRemove(user.displayName),
+        typing: firebase.firestore.FieldValue.arrayRemove(name),
       });
+    //Clearing all the inputs for further use
     setData();
     setInput("");
     setFileType();
     setUrl();
+    setRefmessage(null);
     inputReference.current.value = "";
   };
+
+  //Controller for attachments
   const onFileInput = (e) => {
     console.log("after ref click");
     console.log(e.target.files[0]);
@@ -126,6 +144,8 @@ function ChatRoom() {
       inputReference.current.value = "";
     }
   };
+
+  //controller for sending the typing status to backend
   const inputHandleChange = (e) => {
     let name = `${user.displayName}, `;
     if (e.target.value != "") {
@@ -143,19 +163,33 @@ function ChatRoom() {
     }
     setInput(e.target.value);
   };
+
+  //controller for removal of attachemnt
   const removeAttachment = () => {
     setUrl();
     setData();
     setFileType();
     inputReference.current.value = "";
+    setRefmessage(null);
   };
+
+  //Controller for the refrence message attachment
+  const refMessageMethod = (message) => {
+    console.log(message);
+    setRefmessage(message);
+  };
+  //Rendering data
   return (
     <div className="chat">
       <div className="chat__header">
         <h2>{roomName}</h2>
         {typing.length == 0 ? null : <p>{[...typing]}is typing.</p>}
       </div>
-      <Chat messages={messages} name={user.displayName} />
+      <Chat
+        messages={messages}
+        name={user.displayName}
+        refMethod={refMessageMethod}
+      />
       {url && (
         <div className="chat__file">
           <IconButton onClick={removeAttachment}>
@@ -163,6 +197,16 @@ function ChatRoom() {
           </IconButton>
           <div className="chat__file__preview">
             <Attachment type={fileType} file={url} />
+          </div>
+        </div>
+      )}
+      {refMessage && (
+        <div>
+          <IconButton onClick={removeAttachment}>
+            <Cancel />
+          </IconButton>
+          <div className="chat__file__preview">
+            <Attachment type={0} file={refMessage} />
           </div>
         </div>
       )}

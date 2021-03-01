@@ -3,6 +3,13 @@ import React from "react";
 function Attachment({ type, file }) {
   let attachedFile;
   switch (type) {
+    case 0:
+      attachedFile = (
+        <div>
+          <p>{file.message}</p>
+        </div>
+      );
+      break;
     case 1:
       attachedFile = (
         <a target="_blank" href={file}>
