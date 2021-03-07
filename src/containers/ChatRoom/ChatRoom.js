@@ -201,11 +201,11 @@ function ChatRoom() {
         </div>
       )}
       {refMessage && (
-        <div>
+        <div className="chat__refmessage">
           <IconButton onClick={removeAttachment}>
             <Cancel />
           </IconButton>
-          <div className="chat__file__preview">
+          <div className="chat__refmessage__preview">
             <Attachment type={0} file={refMessage} />
           </div>
         </div>
@@ -233,8 +233,9 @@ function ChatRoom() {
             type="submit"
             disabled={data || input ? false : true}
             onClick={sendMessage}
+            style={{ backgroundColor: "#9e3391", margin: "2px" }}
           >
-            <Send />
+            <Send style={{ color: "white" }} />
           </IconButton>
         </form>
       </div>

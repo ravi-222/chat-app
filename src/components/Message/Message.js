@@ -23,13 +23,24 @@ const Message = ({ message, type, name, refMethod }) => {
           message.name === name && "message__content__sender"
         }`}
       >
-        {message.reference_msg && <span>{message.reference_msg.message}</span>}
-        <span className="message__content__name">{message.name}</span>
+        {/* <span className="message__content__name">{message.name}</span> */}
         <div className="message__content__file">
           {message.file && <Attachment type={type} file={message.file} />}
         </div>
+        {message.reference_msg && (
+          <div className="message__content__reference">
+            {/*  <div className="message__content__reference__name">
+              {message.reference_msg.name}
+            </div> */}
+            <div>{message.reference_msg.message}</div>
+          </div>
+        )}
         <div className="message__content__text">{message.message}</div>
-        <div className="message__content__timestamp">
+        <div
+          className={`message__content__timestamp ${
+            message.name === name && "message__content__timestamp__sender"
+          }`}
+        >
           {new Date(message.timestamp?.toDate()).toUTCString()}
         </div>
       </div>
