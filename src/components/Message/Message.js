@@ -6,7 +6,8 @@ import "./Message.css";
 
 const Message = ({ message, type, name, refMethod }) => {
   const refMessageSetter = () => {
-    refMethod(message);
+    const msg = { name: message.name, message: message.message };
+    refMethod(msg);
   };
   return (
     <div className={`message ${message.name === name && "message__sender"} `}>
