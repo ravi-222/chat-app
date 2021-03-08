@@ -6,9 +6,7 @@
 .message__sender {
   flex-direction: row-reverse;
 }
-.message__sender img {
-  display: none;
-}
+
 .message__content {
   position: relative;
   font-size: 16px;
@@ -82,6 +80,9 @@
   height: 30px;
   border-radius: 50%;
   margin: 2px 5px;
+}
+.message__avatar__sender {
+  display: none;
 }
 .message__button {
   padding: 1em;

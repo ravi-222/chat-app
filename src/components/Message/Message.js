@@ -11,7 +11,11 @@ const Message = ({ message, type, name, refMethod }) => {
   };
   return (
     <div className={`message ${message.name === name && "message__sender"} `}>
-      <div className={`message__avatar`}>
+      <div
+        className={`message__avatar ${
+          message.name === name && "message__avatar__sender"
+        }`}
+      >
         <img
           src={
             message.photoUrl ||
