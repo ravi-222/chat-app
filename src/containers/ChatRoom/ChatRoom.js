@@ -16,18 +16,20 @@ import { useStateValue } from "../../StateProvider";
 import firebase from "firebase";
 import Chat from "../../components/Chat/Chat";
 import Attachment from "../../components/attachment/Attachment";
+import MediaPreview from "../../components/MediaPreview/MediaPreview";
 
 function ChatRoom() {
   const [input, setInput] = useState("");
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
-  const [fileType, setFileType] = useState();
+  const [files, setFiles] = useState();
   const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
   const [data, setData] = useState();
   const [url, setUrl] = useState();
   const [typing, setTyping] = useState([]);
   const [refMessage, setRefmessage] = useState(null);
+  const [preview, setPreview] = useState(false);
   const inputReference = useRef();
 
   //useEffect for fetching the typing status
@@ -59,7 +61,7 @@ function ChatRoom() {
 
   //for sending the message to firebase
   const sendMessage = async (e) => {
-    //this name if for the typing status
+    /*
     e.preventDefault();
     let name = `${user.displayName}, `;
     let message = {
@@ -121,31 +123,47 @@ function ChatRoom() {
     setFileType();
     setUrl();
     setRefmessage(null);
-    inputReference.current.value = "";
+    inputReference.current.value = "";*/
   };
 
   //Controller for attachments
   const onFileInput = (e) => {
-    console.log("after ref click");
-    console.log(e.target.files[0]);
-    if (e.target.files[0]) {
-      if (e.target.files[0].type.includes("image")) {
-        setFileType(1);
-      } else if (e.target.files[0].type.includes("video")) {
-        setFileType(2);
-      } else if (e.target.files[0].type.includes("audio")) {
-        setFileType(3);
+    let fileO = {};
+    if (e.target.files) {
+      for (let i = 0; i < e.target.files.length; i++) {
+        let data = e.target.files[i];
+        let url = URL.createObjectURL(e.target.files[i]);
+        if (e.target.files[i].type.includes("image")) {
+          fileO[i] = {
+            data: data,
+            url: url,
+            type: 1,
+          };
+        } else if (e.target.files[i].type.includes("video")) {
+          fileO[i] = {
+            data: data,
+            url: url,
+            type: 2,
+          };
+        } else if (e.target.files[i].type.includes("audio")) {
+          fileO[i] = {
+            data: data,
+            url: url,
+            type: 3,
+          };
+        }
       }
-      setUrl(URL.createObjectURL(e.target.files[0]));
-      setData(e.target.files[0]);
+      console.log(fileO);
+      setFiles(fileO);
     } else {
-      setUrl();
-      setData(null);
+      setFiles(null);
+
       inputReference.current.value = "";
     }
   };
 
   //controller for sending the typing status to backend
+
   const inputHandleChange = (e) => {
     let name = `${user.displayName}, `;
     if (e.target.value != "") {
@@ -166,9 +184,8 @@ function ChatRoom() {
 
   //controller for removal of attachemnt
   const removeAttachment = () => {
-    setUrl();
-    setData();
-    setFileType();
+    setFiles(null);
+
     inputReference.current.value = "";
     setRefmessage(null);
   };
@@ -178,6 +195,15 @@ function ChatRoom() {
     console.log(message);
     setRefmessage(message);
   };
+
+  const openPreview = () => {
+    setPreview(true);
+  };
+
+  const closePreview = () => {
+    setPreview(false);
+  };
+
   //Rendering data
   return (
     <div className="chat">
@@ -185,6 +211,7 @@ function ChatRoom() {
         <h2>{roomName}</h2>
         {typing.length == 0 ? null : <p>{[...typing]}is typing.</p>}
       </div>
+
       <Chat
         messages={messages}
         name={user.displayName}
@@ -196,7 +223,7 @@ function ChatRoom() {
             <Cancel />
           </IconButton>
           <div className="chat__file__preview">
-            <Attachment type={fileType} file={url} />
+            {/* <Attachment type={fileType} file={url} /> */}
           </div>
         </div>
       )}
@@ -216,12 +243,17 @@ function ChatRoom() {
             name="attachemtUpload"
             id="attachemtUpload"
             type="file"
+            multiple
             ref={inputReference}
             onChange={onFileInput}
             hidden
           />
           <AttachFile />
         </IconButton>
+        <IconButton onClick={openPreview} component="label">
+          <AttachFile style={{ color: "red" }} />
+        </IconButton>
+        <MediaPreview open={preview} handleClose={closePreview} />
         <form>
           <input
             value={input}
