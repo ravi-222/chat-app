@@ -34,9 +34,9 @@ const Message = ({ message, type, name, refMethod }) => {
         </div>
         {message.reference_msg && (
           <div className="message__content__reference">
-            {/*  <div className="message__content__reference__name">
+            <div className="message__content__reference__name">
               {message.reference_msg.name}
-            </div> */}
+            </div>
             <div>{message.reference_msg.message}</div>
           </div>
         )}
