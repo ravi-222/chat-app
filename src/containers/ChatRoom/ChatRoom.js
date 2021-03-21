@@ -2,6 +2,7 @@ import { Avatar, IconButton, Button, Icon } from "@material-ui/core";
 import {
   AttachFile,
   Cancel,
+  FlipSharp,
   InsertEmoticon,
   Message,
   Mic,
@@ -26,6 +27,7 @@ function ChatRoom() {
   const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
   const [data, setData] = useState();
+
   const [url, setUrl] = useState();
   const [typing, setTyping] = useState([]);
   const [refMessage, setRefmessage] = useState(null);
@@ -61,47 +63,29 @@ function ChatRoom() {
 
   //for sending the message to firebase
   const sendMessage = async (e) => {
-    /*
+    let urls = [];
     e.preventDefault();
     let name = `${user.displayName}, `;
-    let message = {
-      message: input,
-      name: user.displayName,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      type: fileType,
-      photoUrl: user.photoURL,
-    };
-    if (data) {
-      message = {};
-    }
-    if (data) {
-      let dataName = `${Math.floor(Math.random() * 5000)}__${data.name}`;
-      const uploadTask = storage.ref(`files/${dataName}`).put(data);
-      uploadTask.on(
-        "state_changed",
-        () => {},
-        (error) => {
-          console.log(error);
-          alert(error.message);
-        },
-        () => {
-          storage
-            .ref("files")
-            .child(dataName)
-            .getDownloadURL()
-            .then((url) => {
-              db.collection("rooms").doc(roomId).collection("messages").add({
-                message: input,
-                name: user.displayName,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                type: fileType,
-                photoUrl: user.photoURL,
-                file: url,
-                reference_msg: refMessage,
-              });
-            });
-        }
-      );
+
+    if (files) {
+      // console.log(files);
+      let copy = {};
+
+      for (let i in files) {
+        let dataName = `${Date.now()}__${files[i].data.name}`;
+        await storage.ref(`files/${dataName}`).put(files[i].data);
+        let url = await storage.ref("files").child(dataName).getDownloadURL();
+        copy[i] = { url: url, type: files[i].type };
+      }
+
+      await db.collection("rooms").doc(roomId).collection("messages").add({
+        message: input,
+        name: user.displayName,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        photoUrl: user.photoURL,
+        files: copy,
+        reference_msg: refMessage,
+      });
     } else {
       db.collection("rooms").doc(roomId).collection("messages").add({
         message: input,
@@ -120,10 +104,10 @@ function ChatRoom() {
     //Clearing all the inputs for further use
     setData();
     setInput("");
-    setFileType();
+    setFiles(null);
     setUrl();
     setRefmessage(null);
-    inputReference.current.value = "";*/
+    inputReference.current.value = "";
   };
 
   //Controller for attachments
@@ -136,24 +120,24 @@ function ChatRoom() {
         if (e.target.files[i].type.includes("image")) {
           fileO[i] = {
             data: data,
-            url: url,
+            localUrl: url,
             type: 1,
           };
         } else if (e.target.files[i].type.includes("video")) {
           fileO[i] = {
             data: data,
-            url: url,
+            localUrl: url,
             type: 2,
           };
         } else if (e.target.files[i].type.includes("audio")) {
           fileO[i] = {
             data: data,
-            url: url,
+            localUrl: url,
             type: 3,
           };
         }
       }
-      console.log(fileO);
+
       setFiles(fileO);
     } else {
       setFiles(null);
@@ -263,7 +247,7 @@ function ChatRoom() {
           />
           <IconButton
             type="submit"
-            disabled={data || input ? false : true}
+            disabled={files || input ? false : true}
             onClick={sendMessage}
             style={{ backgroundColor: "#9e3391", margin: "2px" }}
           >
