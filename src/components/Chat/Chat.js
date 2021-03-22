@@ -4,7 +4,6 @@ import "./Chat.css";
 
 function Chat({ messages, name, refMethod }) {
   const dummy = useRef();
-
   useEffect(() => {
     return () => {
       dummy.current.scrollIntoView({ behavior: "smooth" });
@@ -16,6 +15,7 @@ function Chat({ messages, name, refMethod }) {
       <div className="chat__body">
         {messages.map((message) => (
           <Message
+            key={message.timestamp}
             message={message}
             type={message.type}
             name={name}

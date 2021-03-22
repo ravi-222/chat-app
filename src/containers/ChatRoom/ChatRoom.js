@@ -26,8 +26,6 @@ function ChatRoom() {
   const [files, setFiles] = useState();
   const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
-  const [data, setData] = useState();
-
   const [url, setUrl] = useState();
   const [typing, setTyping] = useState([]);
   const [refMessage, setRefmessage] = useState(null);
@@ -63,46 +61,37 @@ function ChatRoom() {
 
   //for sending the message to firebase
   const sendMessage = async (e) => {
-    let urls = [];
     e.preventDefault();
-    let name = `${user.displayName}, `;
-
+    let copy = [];
     if (files) {
-      // console.log(files);
-      let copy = {};
-
       for (let i in files) {
         let dataName = `${Date.now()}__${files[i].data.name}`;
         await storage.ref(`files/${dataName}`).put(files[i].data);
         let url = await storage.ref("files").child(dataName).getDownloadURL();
         copy[i] = { url: url, type: files[i].type };
       }
-
-      await db.collection("rooms").doc(roomId).collection("messages").add({
-        message: input,
-        name: user.displayName,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        photoUrl: user.photoURL,
-        files: copy,
-        reference_msg: refMessage,
-      });
-    } else {
-      db.collection("rooms").doc(roomId).collection("messages").add({
-        message: input,
-        name: user.displayName,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        type: 0,
-        photoUrl: user.photoURL,
-        reference_msg: refMessage,
-      });
     }
+
+    await db
+      .collection("rooms")
+      .doc(roomId)
+      .collection("messages")
+      .add({
+        message: input,
+        name: user.displayName,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        photoUrl: user.photoURL,
+        files: copy.length ? copy : null,
+        reference_msg: refMessage,
+      });
+
+    //clearing typing
     db.collection("rooms")
       .doc(roomId)
       .update({
-        typing: firebase.firestore.FieldValue.arrayRemove(name),
+        typing: firebase.firestore.FieldValue.arrayRemove(user.displayName),
       });
     //Clearing all the inputs for further use
-    setData();
     setInput("");
     setFiles(null);
     setUrl();
@@ -137,30 +126,26 @@ function ChatRoom() {
           };
         }
       }
-
       setFiles(fileO);
     } else {
       setFiles(null);
-
       inputReference.current.value = "";
     }
   };
 
   //controller for sending the typing status to backend
-
   const inputHandleChange = (e) => {
-    let name = `${user.displayName}, `;
     if (e.target.value != "") {
       db.collection("rooms")
         .doc(roomId)
         .update({
-          typing: firebase.firestore.FieldValue.arrayUnion(name),
+          typing: firebase.firestore.FieldValue.arrayUnion(user.displayName),
         });
     } else {
       db.collection("rooms")
         .doc(roomId)
         .update({
-          typing: firebase.firestore.FieldValue.arrayRemove(name),
+          typing: firebase.firestore.FieldValue.arrayRemove(user.displayName),
         });
     }
     setInput(e.target.value);
@@ -179,6 +164,11 @@ function ChatRoom() {
     console.log(message);
     setRefmessage(message);
   };
+  //Previweing the typing
+  const typingItems = [];
+  for (let i in typing) {
+    typingItems.push(<span>{typing[i]}, </span>);
+  }
 
   const openPreview = () => {
     setPreview(true);
@@ -187,13 +177,12 @@ function ChatRoom() {
   const closePreview = () => {
     setPreview(false);
   };
-
   //Rendering data
   return (
     <div className="chat">
       <div className="chat__header">
         <h2>{roomName}</h2>
-        {typing.length == 0 ? null : <p>{[...typing]}is typing.</p>}
+        {typing.length == 0 ? null : <p>{typingItems}is typing.</p>}
       </div>
 
       <Chat
@@ -217,7 +206,10 @@ function ChatRoom() {
             <Cancel />
           </IconButton>
           <div className="chat__refmessage__preview">
-            <Attachment type={0} file={refMessage} />
+            <Attachment
+              type={refMessage.file ? refMessage.file.type : 0}
+              file={refMessage.file ? refMessage.file.url : refMessage.message}
+            />
           </div>
         </div>
       )}

@@ -1,60 +1,138 @@
 import { IconButton } from "@material-ui/core";
-import { Reply } from "@material-ui/icons";
+import { MessageSharp, Reply } from "@material-ui/icons";
 import React from "react";
+import { Fragment } from "react";
 import Attachment from "../attachment/Attachment";
 import "./Message.css";
 
 const Message = ({ message, type, name, refMethod }) => {
-  const refMessageSetter = () => {
-    const msg = { name: message.name, message: message.message };
+  const refMessageSetter = (e, file = null) => {
+    e.persist();
+    const msg = { name: message.name, message: message.message, file: file };
     refMethod(msg);
   };
-  return (
-    <div className={`message ${message.name === name && "message__sender"} `}>
-      <div
-        className={`message__avatar ${
-          message.name === name && "message__avatar__sender"
-        }`}
-      >
-        <img
-          src={
-            message.photoUrl ||
-            "https://api.adorable.io/avatars/23/abott@adorable.png"
-          }
-        />
-      </div>
-      <div
-        className={`message__content ${
-          message.name === name && "message__content__sender"
-        }`}
-      >
-        {/* <span className="message__content__name">{message.name}</span> */}
-        <div className="message__content__file">
-          {message.file && <Attachment type={type} file={message.file} />}
-        </div>
-        {message.reference_msg && (
-          <div className="message__content__reference">
-            <div className="message__content__reference__name">
-              {message.reference_msg.name}
-            </div>
-            <div>{message.reference_msg.message}</div>
-          </div>
-        )}
-        <div className="message__content__text">{message.message}</div>
+  const msgFiles = [];
+  if (message.files) {
+    for (let i = 0; i < message.files.length - 1; i++) {
+      msgFiles.push(
         <div
-          className={`message__content__timestamp ${
-            message.name === name && "message__content__timestamp__sender"
+          key={message.files[i].url}
+          className={`message ${message.name === name && "message__sender"} `}
+        >
+          <div
+            className={`message__avatar ${
+              message.name === name && "message__avatar__sender"
+            }`}
+          >
+            <img
+              src={
+                message.photoUrl ||
+                "https://api.adorable.io/avatars/23/abott@adorable.png"
+              }
+            />
+          </div>
+          <div
+            className={`message__content ${
+              message.name === name && "message__content__sender"
+            }`}
+          >
+            <div className="message__content__file">
+              <Attachment
+                type={message.files[i].type}
+                file={message.files[i].url}
+              />
+            </div>
+            <div
+              className={`message__content__timestamp ${
+                message.name === name && "message__content__timestamp__sender"
+              }`}
+            >
+              {new Date(message.timestamp?.toDate()).toUTCString()}
+            </div>
+          </div>
+          <div className={`message__button`}>
+            <IconButton
+              size="small"
+              onClick={(e) => refMessageSetter(e, message.files[i])}
+            >
+              <Reply fontSize="small" />
+            </IconButton>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  return (
+    <Fragment>
+      {msgFiles}
+      <div className={`message ${message.name === name && "message__sender"} `}>
+        <div
+          className={`message__avatar ${
+            message.name === name && "message__avatar__sender"
           }`}
         >
-          {new Date(message.timestamp?.toDate()).toUTCString()}
+          <img
+            src={
+              message.photoUrl ||
+              "https://api.adorable.io/avatars/23/abott@adorable.png"
+            }
+          />
+        </div>
+        <div
+          className={`message__content ${
+            message.name === name && "message__content__sender"
+          }`}
+        >
+          {/* <span className="message__content__name">{message.name}</span> */}
+          <div className="message__content__file">
+            {message.files && (
+              <Attachment
+                type={message.files[message.files.length - 1].type}
+                file={message.files[message.files.length - 1].url}
+              />
+            )}
+          </div>
+          {message.reference_msg && (
+            <div className="message__content__reference">
+              <div className="message__content__reference__name">
+                {message.reference_msg.name}
+              </div>
+              <div>{message.reference_msg.message}</div>
+              {message.reference_msg.file ? (
+                <div className="message__content__reference__file">
+                  <Attachment
+                    type={message.reference_msg.file.type}
+                    file={message.reference_msg.file.url}
+                  />
+                </div>
+              ) : null}
+            </div>
+          )}
+          <div className="message__content__text">{message.message}</div>
+          <div
+            className={`message__content__timestamp ${
+              message.name === name && "message__content__timestamp__sender"
+            }`}
+          >
+            {new Date(message.timestamp?.toDate()).toUTCString()}
+          </div>
+        </div>
+        <div className={`message__button`}>
+          <IconButton
+            size="small"
+            onClick={
+              message.files
+                ? (e) =>
+                    refMessageSetter(e, message.files[message.files.length - 1])
+                : (e) => refMessageSetter(e)
+            }
+          >
+            <Reply fontSize="small" />
+          </IconButton>
         </div>
       </div>
-      <div className={`message__button`}>
-        <IconButton size="small" onClick={refMessageSetter}>
-          <Reply fontSize="small" />
-        </IconButton>
-      </div>
-    </div>
+    </Fragment>
   );
 };
 
