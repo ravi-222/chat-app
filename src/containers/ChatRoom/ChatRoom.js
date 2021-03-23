@@ -70,13 +70,13 @@ const ChatRoom = () => {
       .collection("messages")
       .add({
         message: inputVal,
-        /* user :{
+        user: {
           name: user.displayName,
           photoUrl: user.photoURL,
-        }, */
-        name: user.displayName,
+        },
+
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        photoUrl: user.photoURL,
+
         files: copy.length ? copy : null,
         reference_msg: refMessage,
       });
@@ -96,7 +96,6 @@ const ChatRoom = () => {
 
   //Controller for attachments
   const onFileInput = (file) => {
-    console.log(file);
     setFiles(file);
   };
 

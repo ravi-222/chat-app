@@ -34,7 +34,6 @@ const ChatFooter = ({
     e.preventDefault();
     sendMessage(input);
     clearInput();
-    console.log("send");
   };
 
   //controller for file submit
@@ -67,7 +66,6 @@ const ChatFooter = ({
       }
       setFile(tempFile);
       onFileInput(tempFile);
-      console.log("file uploaded");
     }
   };
 

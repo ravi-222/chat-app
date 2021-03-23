@@ -8,7 +8,13 @@ import "./Message.css";
 const Message = ({ message, name, refMethod }) => {
   const refMessageSetter = (e, file = null) => {
     e.persist();
-    const msg = { name: message.name, message: message.message, file: file };
+    console.log(message);
+    const msg = {
+      name: message.user.name,
+      message: message.message,
+      file: file,
+      timestamp: message.timestamp,
+    };
     refMethod(e, msg);
   };
   const msgFiles = [];
@@ -17,23 +23,25 @@ const Message = ({ message, name, refMethod }) => {
       msgFiles.push(
         <div
           key={message.files[i].url}
-          className={`message ${message.name === name && "message__sender"} `}
+          className={`message ${
+            message.user.name === name && "message__sender"
+          } `}
         >
           <div
             className={`message__avatar ${
-              message.name === name && "message__avatar__sender"
+              message.user.name === name && "message__avatar__sender"
             }`}
           >
             <img
               src={
-                message.photoUrl ||
+                message.user.photoUrl ||
                 "https://api.adorable.io/avatars/23/abott@adorable.png"
               }
             />
           </div>
           <div
             className={`message__content ${
-              message.name === name && "message__content__sender"
+              message.user.name === name && "message__content__sender"
             }`}
           >
             <div className="message__content__file">
@@ -44,7 +52,8 @@ const Message = ({ message, name, refMethod }) => {
             </div>
             <div
               className={`message__content__timestamp ${
-                message.name === name && "message__content__timestamp__sender"
+                message.user.name === name &&
+                "message__content__timestamp__sender"
               }`}
             >
               {new Date(message.timestamp?.toDate()).toUTCString()}
@@ -66,22 +75,26 @@ const Message = ({ message, name, refMethod }) => {
   return (
     <Fragment>
       {msgFiles}
-      <div className={`message ${message.name === name && "message__sender"} `}>
+      <div
+        className={`message ${
+          message.user.name === name && "message__sender"
+        } `}
+      >
         <div
           className={`message__avatar ${
-            message.name === name && "message__avatar__sender"
+            message.user.name === name && "message__avatar__sender"
           }`}
         >
           <img
             src={
-              message.photoUrl ||
+              message.user.photoUrl ||
               "https://api.adorable.io/avatars/23/abott@adorable.png"
             }
           />
         </div>
         <div
           className={`message__content ${
-            message.name === name && "message__content__sender"
+            message.user.name === name && "message__content__sender"
           }`}
         >
           {/* <span className="message__content__name">{message.name}</span> */}
@@ -112,7 +125,8 @@ const Message = ({ message, name, refMethod }) => {
           <div className="message__content__text">{message.message}</div>
           <div
             className={`message__content__timestamp ${
-              message.name === name && "message__content__timestamp__sender"
+              message.user.name === name &&
+              "message__content__timestamp__sender"
             }`}
           >
             {new Date(message.timestamp?.toDate()).toUTCString()}
