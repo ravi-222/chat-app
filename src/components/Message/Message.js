@@ -2,14 +2,14 @@ import { IconButton } from "@material-ui/core";
 import { MessageSharp, Reply } from "@material-ui/icons";
 import React from "react";
 import { Fragment } from "react";
-import Attachment from "../attachment/Attachment";
+import Attachment from "../Attachment/Attachment";
 import "./Message.css";
 
-const Message = ({ message, type, name, refMethod }) => {
+const Message = ({ message, name, refMethod }) => {
   const refMessageSetter = (e, file = null) => {
     e.persist();
     const msg = { name: message.name, message: message.message, file: file };
-    refMethod(msg);
+    refMethod(e, msg);
   };
   const msgFiles = [];
   if (message.files) {

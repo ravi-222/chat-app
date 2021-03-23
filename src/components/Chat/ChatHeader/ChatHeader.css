@@ -1,0 +1,15 @@
+.chat__header {
+  padding: 18px;
+  background-color: #9e3391;
+  color: white;
+}
+
+.chat__header > p {
+  padding-left: 10px;
+  color: white;
+  margin: 0;
+}
+
+.chat__header > h2 {
+  margin-bottom: 10px;
+}

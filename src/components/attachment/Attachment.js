@@ -1,9 +1,6 @@
 import React from "react";
 
 function Attachment({ type, file }) {
-  if (type == 0) {
-    console.log(file);
-  }
   let attachedFile;
   switch (type) {
     case 0:

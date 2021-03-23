@@ -1,31 +1,33 @@
-import React, { useRef, useEffect, Fragment } from "react";
-import Message from "../Message/Message";
+import React, { Fragment } from "react";
+import ChatBody from "./ChatBody/ChatBody";
+import ChatFooter from "./ChatFooter/ChatFooter";
+import ChatHeader from "./ChatHeader/ChatHeader";
 import "./Chat.css";
 
-function Chat({ messages, name, refMethod }) {
-  const dummy = useRef();
-  useEffect(() => {
-    return () => {
-      dummy.current.scrollIntoView({ behavior: "smooth" });
-    };
-  }, [messages]);
-
+const Chat = ({
+  typing,
+  roomName,
+  messages,
+  name,
+  refMethod,
+  onFileInput,
+  handleTyping,
+  sendMessage,
+  refMessage,
+}) => {
   return (
-    <Fragment>
-      <div className="chat__body">
-        {messages.map((message) => (
-          <Message
-            key={message.timestamp}
-            message={message}
-            type={message.type}
-            name={name}
-            refMethod={refMethod}
-          />
-        ))}
-        <span ref={dummy}></span>
-      </div>
-    </Fragment>
+    <div className="chat">
+      <ChatHeader typing={typing} roomName={roomName} />
+      <ChatBody messages={messages} name={name} refMethod={refMethod} />
+      <ChatFooter
+        onFileInput={onFileInput}
+        handleTyping={handleTyping}
+        sendMessage={sendMessage}
+        refMessage={refMessage}
+        refMethod={refMethod}
+      />
+    </div>
   );
-}
+};
 
 export default Chat;

@@ -1,4 +1,7 @@
-.chat__body {
-  flex: 1;
+.chat {
+  grid-column: 2;
+  background-color: white;
+  display: grid;
+  grid-template-rows: 1fr 7fr 1fr;
   overflow: auto;
 }
