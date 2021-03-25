@@ -1,32 +1,18 @@
-import { Avatar, IconButton, Button, Icon } from "@material-ui/core";
-import {
-  AttachFile,
-  Cancel,
-  FlipSharp,
-  InsertEmoticon,
-  Message,
-  Mic,
-  MoreVert,
-  Send,
-} from "@material-ui/icons";
 import React, { useState, useEffect, useRef, Fragment } from "react";
-import { useParams } from "react-router-dom";
 import "./ChatRoom.css";
+import { useParams } from "react-router-dom";
 import db, { storage } from "../../config";
-import { useStateValue } from "../../StateProvider";
 import firebase from "firebase";
 import Chat from "../../components/Chat/Chat";
-import ChatFooter from "../../components/Chat/ChatFooter/ChatFooter";
-import ChatHeader from "../../components/Chat/ChatHeader/ChatHeader";
-
-import MediaPreview from "../../components/MediaPreview/MediaPreview";
+//import MediaPreview from "../../components/MediaPreview/MediaPreview";
+import { useSelector } from "react-redux";
 
 const ChatRoom = () => {
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
   const [files, setFiles] = useState();
   const [messages, setMessages] = useState([]);
-  const [{ user }, dispatch] = useStateValue();
+  const { user } = useSelector((state) => state.auth);
   //const [url, setUrl] = useState();
   const [typing, setTyping] = useState([]);
   const [refMessage, setRefmessage] = useState(null);
