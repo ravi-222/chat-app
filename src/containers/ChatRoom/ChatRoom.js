@@ -4,19 +4,21 @@ import { useParams } from "react-router-dom";
 import db, { storage } from "../../config";
 import firebase from "firebase";
 import Chat from "../../components/Chat/Chat";
+import { messageFetch } from "../../store/actions/messages";
 //import MediaPreview from "../../components/MediaPreview/MediaPreview";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const ChatRoom = () => {
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
   const [files, setFiles] = useState();
-  const [messages, setMessages] = useState([]);
+  const { messages } = useSelector((state) => state.message);
   const { user } = useSelector((state) => state.auth);
   //const [url, setUrl] = useState();
   const [typing, setTyping] = useState([]);
   const [refMessage, setRefmessage] = useState(null);
   //const [preview, setPreview] = useState(false);
+  const dispatch = useDispatch();
 
   //useEffect for fetching all the messages and the typing status
   useEffect(() => {
@@ -26,13 +28,7 @@ const ChatRoom = () => {
         .onSnapshot((snapshot) => {
           setRoomName(snapshot.data().name);
           setTyping(snapshot.data().typing);
-          db.collection("rooms")
-            .doc(roomId)
-            .collection("messages")
-            .orderBy("timestamp", "asc")
-            .onSnapshot((snapshot) => {
-              setMessages(snapshot.docs.map((doc) => doc.data()));
-            });
+          dispatch(messageFetch(roomId));
         });
     }
   }, [roomId]);

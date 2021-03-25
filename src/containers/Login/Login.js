@@ -1,7 +1,7 @@
 import { Button, Input } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { authentication } from "../../Store/actions/auth";
+import { authentication } from "../../store/actions/auth";
 import Spinner from "../../utilities/Spinners/Spinner";
 import "./Login.css";
 

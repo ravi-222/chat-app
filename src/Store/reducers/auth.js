@@ -23,7 +23,7 @@ const authSuccess = (state, action) => {
   return updateObject(state, newData);
 };
 
-//method fro AUTH_FAIL
+//method for AUTH_FAIL
 const authFail = (state, action) => {
   const newData = { error: action.error, loading: false };
   return updateObject(state, newData);

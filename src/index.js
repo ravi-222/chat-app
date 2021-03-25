@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { applyMiddleware, combineReducers, createStore, compose } from "redux";
-import authReducer from "./Store/reducers/auth";
+import authReducer from "./store/reducers/auth";
+import messageReducer from "./store/reducers/message";
 import App from "./App";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
@@ -14,6 +15,7 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  message: messageReducer,
 });
 
 const store = createStore(
