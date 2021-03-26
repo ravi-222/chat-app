@@ -13,15 +13,16 @@ const ChatBody = ({ messages, name, refMethod }) => {
   return (
     <Fragment>
       <div className="chat__body">
-        {messages.map((message) => (
-          <Message
-            key={message.timestamp}
-            message={message}
-            type={message.type}
-            name={name}
-            refMethod={refMethod}
-          />
-        ))}
+        {messages &&
+          messages.map((message) => (
+            <Message
+              key={message.timestamp}
+              message={message}
+              type={message.type}
+              name={name}
+              refMethod={refMethod}
+            />
+          ))}
         <span ref={dummy}></span>
       </div>
     </Fragment>

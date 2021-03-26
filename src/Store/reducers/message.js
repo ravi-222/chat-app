@@ -3,7 +3,7 @@ import { updateObject } from "../../utilities/utility";
 
 //initialisation of state
 const initialState = {
-  messages: [],
+  messages: null,
   error: null,
   loading: false,
 };
