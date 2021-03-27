@@ -1,0 +1,4 @@
+.chat__body {
+  flex: 1;
+  overflow: auto;
+}

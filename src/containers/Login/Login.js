@@ -1,32 +1,23 @@
 import { Button, Input } from "@material-ui/core";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { authentication } from "../../store/actions/auth";
+import Spinner from "../../utilities/Spinners/Spinner";
 import "./Login.css";
-import { auth, provider } from "../../config";
-import { useStateValue } from "../../StateProvider";
-import { actionTypes } from "../../reducer";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [{}, dispatch] = useStateValue();
-
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
   //this is for the popup google account signup
   const signIn = () => {
-    // const provider = new firebase.auth.GoogleAuthProvider();
-    auth
-      .signInWithPopup(provider)
-      .then((result) => {
-        console.log(result.user);
-        dispatch({
-          type: actionTypes.SET_USER,
-          user: result.user,
-        });
-      })
-      .catch((error) => alert(error.message));
+    dispatch(authentication());
   };
 
   //this is for the manual email password sign in
-  /* const signIn = () => {
+  /* 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const signIn = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
@@ -40,8 +31,11 @@ function Login() {
   return (
     <div className="login">
       <div className="login__container">
-        <form className="app__signup">
-          {/* <Input
+        {loading ? (
+          <Spinner />
+        ) : (
+          <form className="app__signup">
+            {/* <Input
             placeholder="email"
             fullWidth={true}
             type="text"
@@ -55,8 +49,9 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
            />*/}
-          <Button onClick={signIn}>Sign In</Button>
-        </form>
+            <Button onClick={signIn}>Sign In</Button>
+          </form>
+        )}
       </div>
     </div>
   );

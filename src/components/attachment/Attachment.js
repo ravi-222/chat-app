@@ -6,7 +6,7 @@ function Attachment({ type, file }) {
     case 0:
       attachedFile = (
         <div>
-          <p>{file.message}</p>
+          <p>{file}</p>
         </div>
       );
       break;

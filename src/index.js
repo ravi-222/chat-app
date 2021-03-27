@@ -1,17 +1,35 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
+import { applyMiddleware, combineReducers, createStore, compose } from "redux";
+import authReducer from "./store/reducers/auth";
+import messageReducer from "./store/reducers/message";
 import App from "./App";
-import reducer, { initialState } from "./reducer";
-import { StateProvider } from "./StateProvider";
+import thunk from "redux-thunk";
+import { Provider } from "react-redux";
+
+const composeEnhancers =
+  process.env.NODE_ENV === "development"
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : null || compose;
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  message: messageReducer,
+});
+
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk))
+);
 
 const app = (
   <React.StrictMode>
-    <StateProvider initialState={initialState} reducer={reducer}>
+    <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </StateProvider>
+    </Provider>
   </React.StrictMode>
 );
 
