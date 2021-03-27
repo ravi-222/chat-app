@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ChatBody from "./ChatBody/ChatBody";
 import ChatFooter from "./ChatFooter/ChatFooter";
 import ChatHeader from "./ChatHeader/ChatHeader";
@@ -18,12 +18,18 @@ const Chat = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
-
+  const fileReference = useRef();
   //for sending the files to the mediaPriview and the chatRoom component
   const setFiles = (files) => {
     setOpen(true);
     setFile(files);
     onFileInput(files);
+  };
+  const modalClose = () => {
+    setOpen(false);
+    setFile(null);
+    onFileInput({});
+    fileReference.current.value = "";
   };
 
   return (
@@ -32,7 +38,7 @@ const Chat = ({
       {file && open && (
         <MediaPreview
           open={open}
-          handleClose={() => setOpen(false)}
+          handleClose={modalClose}
           files={file}
           handleTyping={handleTyping}
           sendMessage={sendMessage}
@@ -40,6 +46,7 @@ const Chat = ({
       )}
       <ChatBody messages={messages} name={name} refMethod={refMethod} />
       <ChatFooter
+        fileReference={fileReference}
         onFileInput={setFiles}
         handleTyping={handleTyping}
         sendMessage={sendMessage}

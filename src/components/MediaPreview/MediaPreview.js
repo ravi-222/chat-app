@@ -41,23 +41,25 @@ function MediaPreview({ open, handleClose, files, handleTyping, sendMessage }) {
       }}
     >
       <div className="previewPaper">
-        {res}
-        <form>
-          <input
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Type a message"
-            type="text"
-          />
-          <IconButton
-            type="submit"
-            disabled={files || input ? false : true}
-            onClick={handleSubmit}
-            style={{ backgroundColor: "#9e3391", margin: "2px" }}
-          >
-            <Send style={{ color: "white" }} />
-          </IconButton>
-        </form>
+        <div className="previewPaper__files">{res}</div>
+        <div className="previewPaper__form">
+          <form>
+            <input
+              value={input}
+              onChange={handleInputChange}
+              placeholder="Type a message"
+              type="text"
+            />
+            <IconButton
+              type="submit"
+              disabled={files || input ? false : true}
+              onClick={handleSubmit}
+              style={{ backgroundColor: "#9e3391", margin: "2px" }}
+            >
+              <Send style={{ color: "white" }} />
+            </IconButton>
+          </form>
+        </div>
       </div>
     </Modal>
   );

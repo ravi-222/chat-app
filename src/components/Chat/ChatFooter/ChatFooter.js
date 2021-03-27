@@ -12,6 +12,7 @@ const Mp3Recorder = new MicRecorder({
 });
 
 const ChatFooter = ({
+  fileReference,
   refMessage,
   onFileInput,
   handleTyping,
@@ -20,7 +21,7 @@ const ChatFooter = ({
 }) => {
   const [input, setInput] = useState("");
   const [isfile, setIsFile] = useState(false);
-  const inputReference = useRef();
+  // const inputReference = useRef();
   const [isRecording, setIsRecording] = useState(false);
 
   const recordingHandler = () => {
@@ -56,7 +57,7 @@ const ChatFooter = ({
   const clearInput = () => {
     setInput("");
     setIsFile(false);
-    inputReference.current.value = "";
+    fileReference.current.value = "";
   };
 
   //controller for typing
@@ -127,7 +128,7 @@ const ChatFooter = ({
             id="attachemtUpload"
             type="file"
             multiple
-            ref={inputReference}
+            ref={fileReference}
             onChange={handlefileSubmit}
             hidden
           />

@@ -71,7 +71,7 @@
 }
 
 .message__content__reference__file img,
-video {
+.message__content__reference__file video {
   width: 10rem;
   height: 10rem;
 }

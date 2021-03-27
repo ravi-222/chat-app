@@ -5,7 +5,6 @@ import db, { storage } from "../../config";
 import firebase from "firebase";
 import Chat from "../../components/Chat/Chat";
 import { messageFetch } from "../../store/actions/messages";
-//import MediaPreview from "../../components/MediaPreview/MediaPreview";
 import { useSelector, useDispatch } from "react-redux";
 
 const ChatRoom = () => {
@@ -14,10 +13,8 @@ const ChatRoom = () => {
   const [files, setFiles] = useState();
   const { messages } = useSelector((state) => state.message);
   const { user } = useSelector((state) => state.auth);
-  //const [url, setUrl] = useState();
   const [typing, setTyping] = useState([]);
   const [refMessage, setRefmessage] = useState(null);
-  //const [preview, setPreview] = useState(false);
   const dispatch = useDispatch();
 
   //useEffect for fetching all the messages and the typing status
@@ -72,13 +69,13 @@ const ChatRoom = () => {
     //Clearing all the inputs for further use
 
     setFiles(null);
-    //setUrl();
     setRefmessage(null);
   };
 
   //Controller for attachments
   const onFileInput = (file) => {
-    setFiles(file);
+    if (Object.keys(file).length == 0) setFiles(null);
+    else setFiles(file);
   };
 
   //controller for sending the typing status to backend
