@@ -17,18 +17,30 @@ const ChatRoom = () => {
   const [refMessage, setRefmessage] = useState(null);
   const dispatch = useDispatch();
 
-  //useEffect for fetching all the messages and the typing status
+  //useEffect for fetching the room name
   useEffect(() => {
     if (roomId) {
       db.collection("rooms")
         .doc(roomId)
         .onSnapshot((snapshot) => {
           setRoomName(snapshot.data().name);
-          setTyping(snapshot.data().typing);
-          dispatch(messageFetch(roomId));
         });
     }
   }, [roomId]);
+
+  //useEffect for fetching all the messages
+  useEffect(() => {
+    dispatch(messageFetch(roomId));
+  }, [roomId]);
+
+  //useEffect for the typing status
+  useEffect(() => {
+    db.collection("rooms")
+      .doc(roomId)
+      .onSnapshot((snapshot) => {
+        setTyping(snapshot.data().typing);
+      });
+  }, []);
 
   //for sending the message to firebase
   const sendMessage = async (inputVal) => {
