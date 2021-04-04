@@ -1,6 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import { IconButton } from "@material-ui/core";
-import { AttachFile, Cancel, Mic, Send, Stop } from "@material-ui/icons";
+import {
+  AttachFile,
+  Cancel,
+  Functions,
+  Mic,
+  Send,
+  Stop,
+} from "@material-ui/icons";
 import Attachment from "../../Attachment/Attachment";
 import { Fragment } from "react";
 import MicRecorder from "mic-recorder-to-mp3";
@@ -18,6 +25,7 @@ const ChatFooter = ({
   handleTyping,
   sendMessage,
   refMethod,
+  openEq,
 }) => {
   const [input, setInput] = useState("");
   const [isfile, setIsFile] = useState(false);
@@ -133,6 +141,9 @@ const ChatFooter = ({
             hidden
           />
           <AttachFile />
+        </IconButton>
+        <IconButton onClick={openEq}>
+          <Functions />
         </IconButton>
         <form>
           <input

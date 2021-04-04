@@ -4,6 +4,7 @@ import ChatFooter from "./ChatFooter/ChatFooter";
 import ChatHeader from "./ChatHeader/ChatHeader";
 import "./Chat.css";
 import MediaPreview from "../MediaPreview/MediaPreview";
+import Eqdialog from "../EqDialog/EqDialog";
 
 const Chat = ({
   typing,
@@ -19,6 +20,7 @@ const Chat = ({
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const fileReference = useRef();
+  const [eqFlag, setEqFlag] = useState(false);
   //for sending the files to the mediaPriview and the chatRoom component
   const setFiles = (files) => {
     setOpen(true);
@@ -44,6 +46,9 @@ const Chat = ({
           sendMessage={sendMessage}
         />
       )}
+      {eqFlag && (
+        <Eqdialog open={eqFlag} handleClose={() => setEqFlag(false)} />
+      )}
       <ChatBody messages={messages} name={name} refMethod={refMethod} />
       <ChatFooter
         fileReference={fileReference}
@@ -52,6 +57,7 @@ const Chat = ({
         sendMessage={sendMessage}
         refMessage={refMessage}
         refMethod={refMethod}
+        openEq={() => setEqFlag(true)}
       />
     </div>
   );
