@@ -14,7 +14,16 @@ const authStart = (state, action) => {
 };
 
 //method for AUTH_SUCCESS
-const authSuccess = (state, action) => {
+const authGoogleSuccess = (state, action) => {
+  const newData = {
+    user: action.user,
+    error: null,
+    loading: false,
+  };
+  return updateObject(state, newData);
+};
+
+const authEmailSuccess = (state, action) => {
   const newData = {
     user: action.user,
     error: null,
@@ -34,8 +43,11 @@ const reducer = (state = initialState, action) => {
     case actionTypes.AUTH_START:
       return authStart(state, action);
 
-    case actionTypes.AUTH_SUCCESS:
-      return authSuccess(state, action);
+    case actionTypes.AUTH_GOOGLE_SUCCESS:
+      return authGoogleSuccess(state, action);
+
+    case actionTypes.AUTH_EMAIL_SUCCESS:
+      return authEmailSuccess(state, action);
 
     case actionTypes.AUTH_FAIL:
       return authFail(state, action);
